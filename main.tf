@@ -42,15 +42,9 @@ module "vpn-1" {
   peer_gateways = {
     default = { gcp = module.vpn-2.self_link }
   }
+  # not sharing any custom routes, should be added to router_config if needed
   router_config = {
     asn = 64514
-    custom_advertise = {
-      all_subnets = true
-       ip_ranges = {
-        # probably only custom, non-defaul ranges here, since all_subnets is set above
-         "10.100.0.0/24" = "default"
-       }
-    }
   }
   tunnels = {
     remote-0 = {
@@ -78,15 +72,9 @@ module "vpn-2" {
   region        = var.region
   network       = module.vpc2.self_link
   name          = "net2-to-net1"
+  # not sharing any custom routes, should be added to router_config if needed
   router_config = { 
     asn = 64513
-    custom_advertise = {
-      all_subnets = true
-      ip_ranges = {
-        # probably only custom, non-defaul ranges here, since all_subnets is set above
-         "10.100.0.0/24" = "default"
-      }
-    } 
  }
   peer_gateways = {
     default = { gcp = module.vpn-1.self_link }
